@@ -100,7 +100,7 @@ app.get('/geocode', function(req, res) {
 });
 
 
-const port = Number(process.env.PORT || 3000);
+const port = Number(process.env.PORT || 5636);
 app.listen(port, function() {
   console.log('Local reverse geocoder listening on port ' + port);
   console.log('Initializing Geocoder…');

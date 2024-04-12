@@ -990,7 +990,7 @@ var geocoder = {
           result = that._geonames.filter((geoname) => geoname.alternateNames?.toLowerCase()?.indexOf(term.toLowerCase()) >= 0);
         }
         // Sort by distance
-        result.sort(function(a, b) {
+        result.slice(0, maxResults).sort(function(a, b) {
           return a[1] - b[1];
         });
         for (var j = 0, lenJ = result.length; j < lenJ; j++) {
