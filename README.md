@@ -1,23 +1,31 @@
-# Local Reverse Geocoder
+# Local Geocoder
 
-This library provides a local reverse geocoder for Node.js that is based on
+This library provides a local geocoder for Node.js that is based on
 [GeoNames](https://download.geonames.org/export/dump/) data. It is _local_ in
 the sense that there are no calls to a remote service like the
 [Google Maps API](https://developers.google.com/maps/documentation/javascript/geocoding#ReverseGeocoding),
-and in consequence the gecoder is suitable for batch reverse geocoding. It is
-_reverse_ in the sense that you give it a (list of) point(s), _i.e._, a
-latitude/longitude pair, and it returns the closest city to that point.
+and in consequence the gecoder is suitable for batch geocoding. It allows to do reverse lookup and by name lookup.
 
+_Reverse lookup_ in the sense that you give it a (list of) point(s), _i.e._, a
+latitude/longitude pair, and it returns the closest city to that point.
+_By name lookup_ in the sense that you give it a (list of) terms, _i.e._, a
+city name, and it returns the closest city match.
+
+## Fork changes
+- `lookUp()` was renamed to `reverseLookup()`
+- Added `lookup()` method that executes a search by given term/name
+- `/geocode` API now uses `lookup()` to search by term
+- `/reverse-geocode` API uses `reverseLookup()` to search by latitude/longitude pair
 ## Installation
 
 ```bash
-$ npm install local-reverse-geocoder
+$ npm install local-geocoder
 ```
 
 Or, with Yarn:
 
 ```bash
-$ yarn add local-reverse-geocoder
+$ yarn add local-geocoder
 ```
 
 ## Docker
@@ -28,14 +36,14 @@ this project. It caches all the required files from GeoNames.
 To build and run it:
 
 ```bash
-$ docker build -t local-reverse-geocoder .
-$ docker run -it -e PORT=3000 --rm local-reverse-geocoder
+$ docker build -t local-geocoder .
+$ docker run -it -e PORT=3000 --rm local-geocoder
 ```
 
 Or pull and run it:
 
 ```bash
-$ docker run -it -e PORT=3000 --rm ghcr.io/tomayac/local-reverse-geocoder
+$ docker run -it -e PORT=3000 --rm ghcr.io/tomayac/local-geocoder
 ```
 
 ## Usage in Node.js
@@ -46,7 +54,7 @@ You must initialize the geocoder prior to the first call to `lookUp()`. This
 ensures that all files are loaded into the cache prior to making the first call.
 
 ```javascript
-var geocoder = require('local-reverse-geocoder');
+var geocoder = require('local-geocoder');
 
 geocoder.init({}, function () {
   // geocoder is loaded and ready to run
@@ -58,7 +66,7 @@ This reduces initialization time and the runtime memory footprint of the Node.js
 process. By default, all files are loaded.
 
 ```javascript
-var geocoder = require('local-reverse-geocoder');
+var geocoder = require('local-geocoder');
 
 geocoder.init(
   {
@@ -80,7 +88,7 @@ Optionally `init()` allows you to specify the directory that GeoNames files are
 downloaded and cached in, and a specific cities database to be used.
 
 ```javascript
-var geocoder = require('local-reverse-geocoder');
+var geocoder = require('local-geocoder');
 
 geocoder.init({ dumpDirectory: '/tmp/geonames' }, function () {
   // Ready to call lookUp and all files will be downloaded to /tmp/geonames
@@ -90,7 +98,7 @@ geocoder.init({ dumpDirectory: '/tmp/geonames' }, function () {
 ### Look Up
 
 ```javascript
-var geocoder = require('local-reverse-geocoder');
+var geocoder = require('local-geocoder');
 
 // With just one point
 var point = { latitude: 42.083333, longitude: 3.1 };
@@ -339,7 +347,7 @@ array needs to be empty.
 #### Example of getting data for individual country
 
 ```javascript
-const geocoder = require('local-reverse-geocoder');
+const geocoder = require('local-geocoder');
 geocoder.init(
   {
     load: {
@@ -372,7 +380,7 @@ export GEOCODER_POSTINSTALL_DUMP_DIRECTORY=/usr/src/app
 export GEOCODER_POSTINSTALL_ADMIN1=true
 export GEOCODER_POSTINSTALL_ADMIN2=true
 export GEOCODER_POSTINSTALL_COUNTRIES=SG,AU
-npm install local-reverse-geocoder
+npm install local-geocoder
 
 // As long as the app is started within the same day
 // and uses the same options, the init call won't download any files.
@@ -398,7 +406,7 @@ issue, try running node with the
 
 ## A Word on Debugging
 
-To turn on debug logging add a DEBUG=local-reverse-geocoder environment variable
+To turn on debug logging add a DEBUG=local-geocoder environment variable
 on the command line.
 
 ## License
@@ -433,4 +441,4 @@ was ported to Node.js by [Luke Arduini](https://github.com/luk-/node-kdt).
 - [@tkafka](https://github.com/tkafka)
 - [@helloitsm3](https://github.com/helloitsm3)
 
-[![npm](https://nodei.co/npm/local-reverse-geocoder.png?downloads=true)](https://nodei.co/npm/local-reverse-geocoder/)
+[![npm](https://nodei.co/npm/local-geocoder.png?downloads=true)](https://nodei.co/npm/local-geocoder/)

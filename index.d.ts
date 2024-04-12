@@ -86,9 +86,15 @@ export type lookUpCallback =
 
 declare const _default: {
   init: (options?: InitOptions, callback?: () => void) => void;
-  lookUp(points: PointsEntry | PointsEntry[], callback: lookUpCallback): void;
-  lookUp(
+  reverseLookup(points: PointsEntry | PointsEntry[], callback: lookUpCallback): void;
+  reverseLookup(
     points: PointsEntry | PointsEntry[],
+    maxResults: number,
+    callback: lookUpCallback
+  ): void;
+  lookup(terms: string | string[], callback: lookUpCallback): void;
+  lookup(
+    terms: string | string[],
     maxResults: number,
     callback: lookUpCallback
   ): void;
